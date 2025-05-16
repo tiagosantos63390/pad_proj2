@@ -1,0 +1,5 @@
+
+All Time Athletics
+<doc id="43544592" url="http://en.wikipedia.org/wiki?curid=43544592" title="2014 European Athletics Championships – Men's 10,000 metres">
+<doc id="43545327" url="http://en.wikipedia.org/wiki?curid=43545327" title="Paid exclusivity">
+Once synchronisation is achieved data can be transferred. The mark signal will be sent to the connected equipment so signal that the circuit is available. As characters are received at one end they will be inverted according to the marking pattern and checked for the present of three 1 (mark) symbols. If it is an error, a RQ character is sent on the return path. No characters are sent on from the receiver for a period of four character times. If an RQ character is received, then the transmitter will start a BQ-cycle in response, send an RQ character and repeat the last three characters sent. This phase of operation is called cycling as the same four characters will be recycled. Hopefully the receiver will have good reception of these and then forward them. If not the RQ will re sent again and repetition attempted.
