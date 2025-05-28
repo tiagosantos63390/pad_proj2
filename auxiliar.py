@@ -141,8 +141,8 @@ for filename in files[:4]:
 
     preprocessed = preprocess_text(original)
     tokens = tokenize(preprocessed)
-    ngrams = extract_ngrams(tokens, 7)
     unigrams = extract_ngrams(tokens, 1)
+    ngrams = extract_ngrams(tokens, 7)
     filtered = filter_by_frequency(ngrams, 2)
 
     scp_scores = {ng: scp_score(ng, filtered, unigrams) for ng in filtered}
