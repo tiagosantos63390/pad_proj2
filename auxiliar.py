@@ -4,6 +4,7 @@ import os
 import spacy
 import string
 import unicodedata
+import random
 
 from collections import defaultdict, Counter
 from itertools import islice
@@ -192,3 +193,57 @@ for filename in files[:4]:
         print(f"{' '.join(ng)}: {score:.4f}")
         
     print(f"\n==========================================================================\n")
+
+
+def collect_all_candidates(directory, max_files=None):
+    all_candidates = set()
+    
+    files = sorted([f for f in os.listdir(directory) if f.startswith('fil_')],
+                  key=lambda x: int(x.split('_')[1]))
+    
+    if max_files:
+        files = files[:max_files]
+    
+    for filename in tqdm(files, desc="Processing Files..."):
+        with open(os.path.join(directory, filename), 'r', encoding='utf-8') as f:
+            original = f.read()
+        
+        preprocessed = preprocess_text(original)
+        tokens = tokenize(preprocessed)
+        unigrams = extract_ngrams(tokens, 1)
+        ngrams = extract_ngrams(tokens, 7)
+        filtered = filter_by_frequency(ngrams, 2)
+        
+        scp_scores = {ng: scp_score(ng, filtered, unigrams) for ng in filtered}
+        dice_scores = {ng: dice_score(ng, filtered, unigrams) for ng in filtered}
+        phi2_scores = {ng: phi2_score(ng, filtered, unigrams) for ng in filtered}
+        
+        sorted_scp_scores = dict(sorted(scp_scores.items(), key=lambda x: x[1], reverse=True))
+        sorted_dice_scores = dict(sorted(dice_scores.items(), key=lambda x: x[1], reverse=True))
+        sorted_phi2_scores = dict(sorted(phi2_scores.items(), key=lambda x: x[1], reverse=True))
+
+        localmax_scp = extract_local_max(sorted_scp_scores, filtered)
+        localmax_dice = extract_local_max(sorted_dice_scores, filtered)
+        localmax_phi2 = extract_local_max(sorted_phi2_scores, filtered)
+        
+        for method in [localmax_scp, localmax_dice, localmax_phi2]:
+            for ngram in method:
+                all_candidates.add(' '.join(ngram))
+    
+    return sorted(all_candidates)
+
+
+candidates = collect_all_candidates(directory,)
+
+
+def precision_evaluation(candidates, sample_size, random_seed=42):
+    random.seed(random_seed)
+    return random.sample(candidates, min(sample_size, len(candidates)))
+
+
+precision_sample = precision_evaluation(candidates, 200)
+
+
+with open('precision_sample.txt', 'w', encoding='utf-8') as f:
+    for i, mwe in enumerate(precision_sample, 1):
+        f.write(f"{i}. {mwe}\n")
