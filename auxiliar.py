@@ -129,82 +129,64 @@ def extract_local_max(scores, ngram_counts, min_len=2):
     return local_max_ngrams
 
 
-directory = 'corpus2mw'
+def select_most_informative(localmax_scores, top_n=15):
+    sorted_res = sorted(
+        localmax_scores.items(),
+        key=lambda x: (x[1], len(x[0])),
+        reverse=True
+    )
+
+    return sorted_res[:top_n]
 
 
-files = sorted([f for f in os.listdir(directory) if f.startswith('fil_')],
-               key=lambda x: int(x.split('_')[1]))
-
-
-for filename in files[:4]:
-    with open(os.path.join(directory, filename), 'r', encoding='utf-8') as f:
-        original = f.read()
-
-    preprocessed = preprocess_text(original)
-    tokens = tokenize(preprocessed)
-    unigrams = extract_ngrams(tokens, 1)
-    ngrams = extract_ngrams(tokens, 7)
-    filtered = filter_by_frequency(ngrams, 2)
-
-    scp_scores = {ng: scp_score(ng, filtered, unigrams) for ng in filtered}
-    dice_scores = {ng: dice_score(ng, filtered, unigrams) for ng in filtered}
-    phi2_scores = {ng: phi2_score(ng, filtered, unigrams) for ng in filtered}
-
-    sorted_scp_scores = dict(sorted(scp_scores.items(), key=lambda x: x[1], reverse=True))
-    sorted_dice_scores = dict(sorted(dice_scores.items(), key=lambda x: x[1], reverse=True))
-    sorted_phi2_scores = dict(sorted(phi2_scores.items(), key=lambda x: x[1], reverse=True))
+def calculate_similarity_matrix(ngram_sets):
+    all_res = list(set(' '.join(ng) for ngrams in ngram_sets for ng in ngrams))
     
-    localmax_scp = extract_local_max(sorted_scp_scores, filtered)
-    localmax_dice = extract_local_max(sorted_dice_scores, filtered)
-    localmax_phi2 = extract_local_max(sorted_phi2_scores, filtered)
+    doc_texts = [' '.join(' '.join(ng) for ng in ngrams) for ngrams in ngram_sets]
 
-    print(f"Original text from {filename}:\n{original[:500]}...\n")
-    print(f"Preprocessed text from {filename}:\n{preprocessed[:500]}...\n")
+    vectorizer = TfidfVectorizer(tokenizer=lambda x: x.split())
+    tfidf_matrix = vectorizer.fit_transform(doc_texts + all_res)
 
-    print(f"Tokens from {filename}:\n{tokens}...\n")
+    re_matrix = tfidf_matrix[-len(all_res):]
+    similarity = cosine_similarity(re_matrix)
 
-    print(f"Most common n-grams from {filename}:\n{ngrams.most_common(5)}\n")
-    print(f"Most common uni-grams from {filename}:\n{unigrams.most_common(5)}\n")
+    return {
+        all_res[i]: {
+            all_res[j]: similarity[i][j] for j in range(len(all_res)) if i != j
+        } for i in range(len(all_res))
+    }
 
-    print(f"Filtered n-grams from {filename}:\n{filtered}")
 
-    print("\nTop 10 by SCP:")
-    for ng, score in islice(sorted_scp_scores.items(), 10):
-        print(f"{' '.join(ng)}: {score:.4f}")
-
-    print("\nTop 10 LocalMax SCP:")
-    for ng, score in sorted(localmax_scp.items(), key=lambda x: x[1], reverse=True)[:10]:
-        print(f"{' '.join(ng)}: {score:.4f}")
+def find_implicit_keywords(explicit_keywords, similarity_matrix, threshold=0.3, top_n=5):
+    implicit_keywords = set()
     
-    print("\nTop 10 by Dice:")
-    for ng, score in islice(sorted_dice_scores.items(), 10):
-        print(f"{' '.join(ng)}: {score:.4f}")
-
-    print("\nTop 10 LocalMax Dice:")
-    for ng, score in sorted(localmax_dice.items(), key=lambda x: x[1], reverse=True)[:10]:
-        print(f"{' '.join(ng)}: {score:.4f}")
-    
-    print("\nTop 10 by Phi²:")
-    for ng, score in islice(sorted_phi2_scores.items(), 10):
-        print(f"{' '.join(ng)}: {score:.4f}")
-
-    print("\nTop 10 LocalMax Phi²:")
-    for ng, score in sorted(localmax_phi2.items(), key=lambda x: x[1], reverse=True)[:10]:
-        print(f"{' '.join(ng)}: {score:.4f}")
+    for ek in explicit_keywords:
+        ek = ek.lower()
+        if ek not in similarity_matrix:
+            continue
         
-    print(f"\n==========================================================================\n")
-
-
-def collect_all_candidates(directory, max_files=None):
-    all_candidates = set()
+        similar = similarity_matrix.get(ek, {})
+        candidates = [(re, sim) for re, sim in similar.items() if sim >= threshold and re != ek]
+        candidates.sort(key=lambda x: x[1], reverse=True)
+        
+        for re, _ in candidates[:top_n]:
+            implicit_keywords.add(re)
     
+    return list(implicit_keywords)
+
+
+def process_documents_for_keywords(directory, num_files=None):
     files = sorted([f for f in os.listdir(directory) if f.startswith('fil_')],
                   key=lambda x: int(x.split('_')[1]))
     
-    if max_files:
-        files = files[:max_files]
+    if num_files:
+        files = files[:num_files]
     
-    for filename in tqdm(files, desc="Processing Files..."):
+    all_documents = []
+    all_explicit_keywords = []
+    all_ngrams = []
+    
+    for filename in tqdm(files, desc="Extracting REs"):
         with open(os.path.join(directory, filename), 'r', encoding='utf-8') as f:
             original = f.read()
         
@@ -217,33 +199,68 @@ def collect_all_candidates(directory, max_files=None):
         scp_scores = {ng: scp_score(ng, filtered, unigrams) for ng in filtered}
         dice_scores = {ng: dice_score(ng, filtered, unigrams) for ng in filtered}
         phi2_scores = {ng: phi2_score(ng, filtered, unigrams) for ng in filtered}
-        
+
         sorted_scp_scores = dict(sorted(scp_scores.items(), key=lambda x: x[1], reverse=True))
         sorted_dice_scores = dict(sorted(dice_scores.items(), key=lambda x: x[1], reverse=True))
         sorted_phi2_scores = dict(sorted(phi2_scores.items(), key=lambda x: x[1], reverse=True))
-
+        
         localmax_scp = extract_local_max(sorted_scp_scores, filtered)
         localmax_dice = extract_local_max(sorted_dice_scores, filtered)
         localmax_phi2 = extract_local_max(sorted_phi2_scores, filtered)
         
+        combined_localmax = {}
         for method in [localmax_scp, localmax_dice, localmax_phi2]:
-            for ngram in method:
-                all_candidates.add(' '.join(ngram))
+            for ng, score in method.items():
+                key = ' '.join(ng)
+                if key not in combined_localmax or score > combined_localmax[key]:
+                    combined_localmax[key] = score
+        
+        informative_res = select_most_informative(combined_localmax)
+        
+        all_documents.append({
+            'filename': filename,
+            'original': original,
+            'preprocessed': preprocessed,
+            'tokens': tokens,
+            'localmax': combined_localmax,
+            'informative_res': informative_res
+        })
+        
+        all_ngrams.append(set(tuple(kw.split()) for kw in combined_localmax.keys()))
+        all_explicit_keywords.append([(kw, score) for kw, score in informative_res])
     
-    return sorted(all_candidates)
+    similarity_matrix = calculate_similarity_matrix(all_ngrams)
+    
+    for i, doc in enumerate(all_documents):
+        explicit_keywords = [ek[0] for ek in all_explicit_keywords[i]]
+        implicit_keywords = find_implicit_keywords(
+            explicit_keywords, 
+            similarity_matrix
+        )
+        
+        doc['explicit_keywords'] = explicit_keywords
+        doc['implicit_keywords'] = implicit_keywords
+    
+    return all_documents
 
 
-candidates = collect_all_candidates(directory,)
+if __name__ == "__main__":
+    directory = 'corpus2mw'
+    documents_with_keywords = process_documents_for_keywords(directory, num_files=2)
+    
+    for doc in documents_with_keywords:
+        print(f"\nDocument: {doc['filename']}")
 
+        print("\nAll Local Maxs (REs):")
+        for i, (kw, score) in enumerate(sorted(doc['localmax'].items(), key=lambda x: -x[1]), 1):
+            print(f"{i}. {kw} (score: {score:.4f})")
 
-def precision_evaluation(candidates, sample_size, random_seed=42):
-    random.seed(random_seed)
-    return random.sample(candidates, min(sample_size, len(candidates)))
-
-
-precision_sample = precision_evaluation(candidates, 200)
-
-
-with open('precision_sample.txt', 'w', encoding='utf-8') as f:
-    for i, mwe in enumerate(precision_sample, 1):
-        f.write(f"{i}. {mwe}\n")
+        print("\nExplicit Keywords (Top Informative REs):")
+        for i, (kw, score) in enumerate(doc['informative_res'], 1):
+            print(f"{i}. {kw} (score: {score:.4f})")
+        
+        print("\nImplicit Keywords (Similarity-Based):")
+        for i, kw in enumerate(doc['implicit_keywords'], 1):
+            print(f"{i}. {kw}")
+        
+        print("\n" + "="*100 + "\n")
