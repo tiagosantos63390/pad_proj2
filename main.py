@@ -112,6 +112,26 @@ def mi_score(ngram, freq, ngrams, corpus_size):
     return math.log((freq / corpus_size) / (total / (len(ngram) - 1)))
 
 
+"""
+    detect relevant ngrams that are local maxima
+    (those that have a score higher than the scores of their parts)
+"""
+def is_local_max(ngram, score, all_scores):
+    if len(ngram) < 2:
+        return False
+
+    for k in range(1, len(ngram)):
+        left = ngram[:k]
+        right = ngram[k:]
+        left_score = all_scores.get(left, 0)
+        right_score = all_scores.get(right, 0)
+
+        if score <= max(left_score, right_score):
+            return False
+
+    return True
+
+
 def process_documents_for_keywords(directory, num_files=None, specific_file=None, metric="scp"):
     files = sorted([f for f in os.listdir(directory) if f.startswith('fil_')],
                   key=lambda x: int(x.split('_')[1]))
@@ -121,7 +141,9 @@ def process_documents_for_keywords(directory, num_files=None, specific_file=None
     elif num_files:
         files = files[:num_files]
     
-    all_documents = []
+    results = []
+    all_tokens = []
+    all_ngrams = Counter()
     
     for filename in tqdm(files, desc="Extracting REs"):
         with open(os.path.join(directory, filename), 'r', encoding='utf-8') as f:
@@ -129,37 +151,54 @@ def process_documents_for_keywords(directory, num_files=None, specific_file=None
         
         preprocessed = preprocess_text(original)
         tokens = tokenize(preprocessed)
-        ngrams = extract_ngrams(tokens, max_n=7) # up to 7 words per n-gram
+        ngrams = extract_ngrams(tokens, max_n=7)  # up to 7 words per n-gram
         
-        dice_scores = {}
-        for ngram, freq in ngrams.items():
-            score = dice_score(ngram, freq, ngrams)
-            dice_scores[ngram] = score
-        sorted_dice_scores = sorted(dice_scores.items(), key=lambda x: x[1], reverse=True)
-
-        scp_scores = {}
-        for ngram, freq in ngrams.items():
-            score = scp_score(ngram, freq, ngrams)
-            scp_scores[ngram] = score
-        sorted_scp_scores = sorted(scp_scores.items(), key=lambda x: x[1], reverse=True)
-
-        mi_scores = {}
-        for ngram, freq in ngrams.items():
-            score = mi_score(ngram, freq, ngrams, len(tokens))
-            mi_scores[ngram] = score
-        sorted_mi_scores = sorted(mi_scores.items(), key=lambda x: x[1], reverse=True)
-
-        all_documents.append({
-            'filename': filename,
-            'original': original,
-            'preprocessed': preprocessed,
-            'tokens': tokens,
-            'dice_scores': sorted_dice_scores,
-            'scp_scores': sorted_scp_scores,
-            'mi_scores': sorted_mi_scores
-        })
+        all_tokens.extend(tokens)
+        all_ngrams.update(ngrams)
     
-    return all_documents
+    dice_scores = {}
+    for ngram, freq in all_ngrams.items():
+        score = dice_score(ngram, freq, all_ngrams)
+        dice_scores[ngram] = score
+    sorted_dice_scores = sorted(dice_scores.items(), key=lambda x: x[1], reverse=True)
+
+    local_max_dice_scores = [
+        (ngram, score) for ngram, score in dice_scores.items()
+        if is_local_max(ngram, score, dice_scores)
+    ]
+
+    scp_scores = {}
+    for ngram, freq in all_ngrams.items():
+        score = scp_score(ngram, freq, all_ngrams)
+        scp_scores[ngram] = score
+    sorted_scp_scores = sorted(scp_scores.items(), key=lambda x: x[1], reverse=True)
+
+    local_max_scp_scores = [
+        (ngram, score) for ngram, score in scp_scores.items()
+        if is_local_max(ngram, score, scp_scores)
+    ]
+
+    mi_scores = {}
+    for ngram, freq in all_ngrams.items():
+        score = mi_score(ngram, freq, all_ngrams, len(all_tokens))
+        mi_scores[ngram] = score
+    sorted_mi_scores = sorted(mi_scores.items(), key=lambda x: x[1], reverse=True)
+
+    local_max_mi_scores = [
+        (ngram, score) for ngram, score in mi_scores.items()
+        if is_local_max(ngram, score, mi_scores)
+    ]
+
+    results.append({
+        'dice_scores': sorted_dice_scores,
+        'local_max_dice_scores': sorted(local_max_dice_scores, key=lambda x: x[1], reverse=True),
+        'scp_scores': sorted_scp_scores,
+        'local_max_scp_scores': sorted(local_max_scp_scores, key=lambda x: x[1], reverse=True),
+        'mi_scores': sorted_mi_scores,
+        'local_max_mi_scores': sorted(local_max_mi_scores, key=lambda x: x[1], reverse=True)
+    })
+    
+    return results
 
 
 if __name__ == "__main__":
@@ -167,31 +206,34 @@ if __name__ == "__main__":
     directory = 'corpus2mw'
 
     # process a specific file
-    #documents_with_keywords = process_documents_for_keywords(directory, specific_file='fil_24')
+    #documents_with_keywords = process_documents_for_keywords(directory, specific_file='fil_2')
     # or process a limited number of files
     documents_with_keywords = process_documents_for_keywords(directory, num_files=5)
     # or process all files
     #documents_with_keywords = process_documents_for_keywords(directory)
     
-    for doc in documents_with_keywords:
-        print(f"\nDocument: {doc['filename']}")
+    results = documents_with_keywords[0]
 
-        #print("\nOriginal Text:")
-        #print(doc['original'])
+    print("\nDice Scores:")
+    for ngram, score in results['dice_scores'][:10]:
+        print(f"{' '.join(ngram)}: {score:.4f}")
 
-        #print("\nPreprocessed Text:")
-        #print(doc['preprocessed'])
+    print("\nLocal Max Dice Scores:")
+    for ngram, score in results['local_max_dice_scores'][:10]:
+        print(f"{' '.join(ngram)}: {score:.4f}")
 
-        print("\nDice Scores:")
-        for ngram, score in doc['dice_scores'][:10]:
-            print(f"{' '.join(ngram)}: {score:.4f}")
+    print("\nSCP Scores:")
+    for ngram, score in results['scp_scores'][:10]:
+        print(f"{' '.join(ngram)}: {score:.4f}")
 
-        print("\nSCP Scores:")
-        for ngram, score in doc['scp_scores'][:10]:
-            print(f"{' '.join(ngram)}: {score:.4f}")
+    print("\nLocal Max SCP Scores:")
+    for ngram, score in results['local_max_scp_scores'][:10]:
+        print(f"{' '.join(ngram)}: {score:.4f}")
 
-        print("\nMI Scores:")
-        for ngram, score in doc['mi_scores'][:10]:
-            print(f"{' '.join(ngram)}: {score:.4f}")
+    print("\nMI Scores:")
+    for ngram, score in results['mi_scores'][:10]:
+        print(f"{' '.join(ngram)}: {score:.4f}")
 
-        print("\n" + "=" * 50)
+    print("\nLocal Max MI Scores:")
+    for ngram, score in results['local_max_mi_scores'][:10]:
+        print(f"{' '.join(ngram)}: {score:.4f}")
