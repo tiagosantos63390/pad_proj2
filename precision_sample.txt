@@ -1,0 +1,10 @@
+shine in the effulgence | Score: 1.0000 | Annotation: TP
+germain was credited | Score: 0.2353 | Annotation: FP
+pressure from the u s authorities | Score: 0.3226 | Annotation: TP
+dryads are | Score: 0.0033 | Annotation: TP
+merged with new york stock | Score: 0.2500 | Annotation: TP
+won the county in every election | Score: 0.1111 | Annotation: TP
+baseman a breadboard | Score: 0.5714 | Annotation: TP
+manifesto that officially terminated | Score: 0.5000 | Annotation: TP
+writing in greek | Score: 0.0678 | Annotation: TP
+voted a | Score: 0.0006 | Annotation: TP
