@@ -1,0 +1,50 @@
+secondly there was the medical | Score: 10.4331 | Annotation: FP
+family to | Score: 0.2783 | Annotation: FP
+actress in a | Score: 4.5127 | Annotation: FP
+especially in the area around | Score: 8.7083 | Annotation: TP
+engine he could arrive | Score: 9.9447 | Annotation: FP
+fi toward | Score: 9.7399 | Annotation: FP
+do most | Score: 3.0306 | Annotation: FP
+subsequent testing | Score: 7.0544 | Annotation: TP
+et al conducted | Score: 10.4331 | Annotation: TP
+growth forest | Score: 6.2201 | Annotation: TP
+hours crawford nursed | Score: 9.5858 | Annotation: FP
+govern by culture rather than by expertise | Score: 11.9372 | Annotation: TP
+literature and is also used | Score: 7.9763 | Annotation: FP
+labor party split the australian | Score: 9.5858 | Annotation: TP
+6 were married couples living together 18 | Score: 6.5557 | Annotation: FP
+wyneken a | Score: 3.9080 | Annotation: FP
+directly tested | Score: 7.1009 | Annotation: TP
+summer a | Score: 0.6499 | Annotation: FP
+slaves would now be counted for determining | Score: 11.0209 | Annotation: TP
+precedent is given less interpretive | Score: 11.5317 | Annotation: TP
+angola was incorporated as an overseas | Score: 10.5509 | Annotation: TP
+near wayzata the town | Score: 7.1721 | Annotation: FP
+prince of asturias | Score: 10.3277 | Annotation: TP
+could be established that | Score: 6.0792 | Annotation: FP
+teaching nor although | Score: 8.1530 | Annotation: FP
+famous people the | Score: 3.2952 | Annotation: FP
+made in the uk | Score: 5.2521 | Annotation: TP
+airport the town of lillington | Score: 10.1046 | Annotation: FP
+europe as well as some | Score: 7.4099 | Annotation: TP
+relations with the united | Score: 6.6109 | Annotation: TP
+her parents | Score: 4.5220 | Annotation: TP
+lawrence won a tony | Score: 10.1454 | Annotation: TP
+computers so | Score: 5.5486 | Annotation: FP
+attempted to erase | Score: 9.5393 | Annotation: TP
+country because | Score: 3.3542 | Annotation: FP
+began there on 12 march | Score: 8.5528 | Annotation: TP
+living together 8 70 | Score: 6.8578 | Annotation: FP
+highly popular | Score: 5.4510 | Annotation: TP
+bills it is | Score: 5.0817 | Annotation: FP
+medora is also | Score: 6.5782 | Annotation: FP
+land by | Score: 0.4650 | Annotation: FP
+empire hence | Score: 6.5900 | Annotation: FP
+and brielse | Score: 3.5278 | Annotation: FP
+become her | Score: 3.1357 | Annotation: FP
+scholars beginning | Score: 6.1200 | Annotation: TP
+western namib gets | Score: 8.6985 | Annotation: TP
+areas such | Score: 3.5127 | Annotation: FP
+throne and | Score: 2.6805 | Annotation: FP
+mountain which is visible | Score: 9.7777 | Annotation: TP
+mean they would have to relinquish | Score: 10.7134 | Annotation: TP

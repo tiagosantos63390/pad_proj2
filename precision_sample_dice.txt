@@ -1,0 +1,50 @@
+only 5 | Score: 0.0063 | Annotation: FP
+girls and the kingsland | Score: 0.5455 | Annotation: FP
+regards to administration is maintaining | Score: 0.6154 | Annotation: FP
+bankruptcy literally | Score: 0.2000 | Annotation: FP
+peace not | Score: 0.0063 | Annotation: FP
+ludwig scotty | Score: 0.5000 | Annotation: TP
+the texian | Score: 0.0004 | Annotation: TP
+tenure all but two | Score: 0.0208 | Annotation: FP
+c as a coach | Score: 0.1463 | Annotation: FP
+four years | Score: 0.0511 | Annotation: FP
+particular the canon | Score: 0.1176 | Annotation: FP
+located in new orleans | Score: 0.0435 | Annotation: TP
+design centre | Score: 0.0526 | Annotation: TP
+gives him | Score: 0.0286 | Annotation: FP
+up for settlement by white | Score: 0.0345 | Annotation: TP
+discrepancy can | Score: 0.0119 | Annotation: FP
+805 these communities | Score: 0.1667 | Annotation: FP
+are most | Score: 0.0025 | Annotation: FP
+eclipse might still be visible | Score: 0.4211 | Annotation: TP
+finished with their first_ever | Score: 0.3333 | Annotation: FP
+vied for control of the northwest balkan | Score: 1.0000 | Annotation: TP
+mid_1973 the paper | Score: 0.2667 | Annotation: FP
+dedicated to the memory | Score: 0.1935 | Annotation: TP
+words of the language represent | Score: 0.1633 | Annotation: TP
+wildlife in 1968 the show broadcast | Score: 0.4000 | Annotation: FP
+chose to work | Score: 0.0440 | Annotation: FP
+post_diluvial creation myth | Score: 0.5714 | Annotation: TP
+and moldowan | Score: 0.0004 | Annotation: FP
+icc player | Score: 0.1250 | Annotation: TP
+spirit of things in 1988 | Score: 0.1600 | Annotation: FP
+remained a small | Score: 0.0392 | Annotation: FP
+films nominated in the book | Score: 0.0842 | Annotation: FP
+angola later entered | Score: 0.1739 | Annotation: TP
+2 of residents | Score: 0.0112 | Annotation: FP
+two big | Score: 0.0067 | Annotation: FP
+enough when we | Score: 0.0526 | Annotation: FP
+claiming red dwarf | Score: 0.6667 | Annotation: TP
+2005 eastern conference all_star | Score: 0.1579 | Annotation: TP
+in belfast | Score: 0.0005 | Annotation: TP
+freedom to | Score: 0.0007 | Annotation: FP
+expressed the view | Score: 0.1905 | Annotation: TP
+track 1 of the sierra | Score: 0.2051 | Annotation: FP
+formula see below which might perform | Score: 0.3333 | Annotation: FP
+later that night | Score: 0.0252 | Annotation: FP
+same as | Score: 0.0053 | Annotation: FP
+communication and special | Score: 0.0800 | Annotation: FP
+of joint_heirs | Score: 0.0003 | Annotation: FP
+300 million | Score: 0.0408 | Annotation: TP
+again in | Score: 0.0031 | Annotation: FP
+indoor air | Score: 0.0465 | Annotation: TP

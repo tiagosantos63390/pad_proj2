@@ -1,0 +1,50 @@
+snowplows pushed | Score: 0.3333 | Annotation: TP
+equus which had | Score: 0.0035 | Annotation: FP
+conference on | Score: 0.0001 | Annotation: FP
+james east | Score: 0.0021 | Annotation: FP
+new hill was at | Score: 0.0031 | Annotation: FP
+evapotranspiration can be measured | Score: 0.4286 | Annotation: TP
+located on the bank of the north | Score: 0.0234 | Annotation: TP
+rel is | Score: 0.0007 | Annotation: FP
+reduced to only | Score: 0.0027 | Annotation: FP
+21 1982 | Score: 0.0048 | Annotation: FP
+be introduced with | Score: 0.0007 | Annotation: FP
+younger brother the future | Score: 0.0556 | Annotation: FP
+ask old norse | Score: 0.2500 | Annotation: TP
+challenges across computer science in systems | Score: 0.1220 | Annotation: TP
+have seen | Score: 0.0001 | Annotation: FP
+production a | Score: 0.0000 | Annotation: FP
+this the | Score: 0.0000 | Annotation: FP
+days ranges | Score: 0.0071 | Annotation: FP
+confesses van garrett | Score: 0.5000 | Annotation: FP
+students enrolled | Score: 0.0063 | Annotation: TP
+the celam | Score: 0.0000 | Annotation: FP
+also adding | Score: 0.0003 | Annotation: FP
+media plays an important role in modern | Score: 0.0698 | Annotation: TP
+these pages | Score: 0.0005 | Annotation: FP
+deep red near | Score: 0.0370 | Annotation: FP
+following publications ranked | Score: 0.0253 | Annotation: TP
+observer status | Score: 0.0104 | Annotation: TP
+weapons state the argument | Score: 0.1034 | Annotation: FP
+support the area s main | Score: 0.0392 | Annotation: FP
+medieval medical school | Score: 0.0165 | Annotation: TP
+80s although it was a traditional | Score: 0.1429 | Annotation: FP
+peers to | Score: 0.0003 | Annotation: FP
+seem likely such a bombardment | Score: 0.3333 | Annotation: TP
+continent and has formal research and exchange | Score: 0.2857 | Annotation: TP
+s arthur | Score: 0.0001 | Annotation: FP
+start the | Score: 0.0000 | Annotation: FP
+the bases was | Score: 0.0002 | Annotation: FP
+god s patronage | Score: 0.0526 | Annotation: TP
+be preserved | Score: 0.0004 | Annotation: FP
+vienna charles never | Score: 0.0455 | Annotation: FP
+empress in | Score: 0.0003 | Annotation: FP
+accepted limitations | Score: 0.0714 | Annotation: TP
+hercules the other four | Score: 0.0517 | Annotation: FP
+critical of intellectual property the primary focus | Score: 0.2400 | Annotation: TP
+forward he added i never thought | Score: 0.1786 | Annotation: FP
+celebrated under a variety of names lúnasa | Score: 0.6000 | Annotation: TP
+arises via | Score: 0.0238 | Annotation: FP
+from stars | Score: 0.0001 | Annotation: FP
+front the | Score: 0.0000 | Annotation: FP
+australian record | Score: 0.0013 | Annotation: FP
