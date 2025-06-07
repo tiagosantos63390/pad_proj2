@@ -1,0 +1,10 @@
+or lived | Score: 0.0028 | Annotation: TP / FP
+travel to see the song | Score: 0.1143 | Annotation: TP / FP
+visible through his pants | Score: 0.5455 | Annotation: TP / FP
+1813 that same year the troy | Score: 0.6250 | Annotation: TP / FP
+asia burma | Score: 0.0833 | Annotation: TP / FP
+heaven i | Score: 0.0147 | Annotation: TP / FP
+vapors from | Score: 0.0022 | Annotation: TP / FP
+highway the park is rich | Score: 0.1818 | Annotation: TP / FP
+to arden | Score: 0.0007 | Annotation: TP / FP
+result even when executing | Score: 0.1395 | Annotation: TP / FP
